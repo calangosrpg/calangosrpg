@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>calangos rpg</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+
+        /* --- Atributos --- */
+        .attributes-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .attribute {
+            background-color: #e0f2f7;
+            border: 1px solid #b3e5fc;
+            border-radius: 8px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .attribute:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .attribute h3 {
+            margin-top: 0;
+            color: #0288d1;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .attribute input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        /* --- Barras de Vida e Estresse --- */
+        .bar-section {
+            margin-bottom: 30px;
+        }
+
+        .bar-container {
+            background-color: #eee;
+            border-radius: 20px;
+            height: 30px;
+            margin-top: 10px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .health-bar .bar-fill {
+            background-color: #e57373; /* Light red */
+        }
+
+        .stress-bar .bar-fill {
+            background-color: #90a4ae; /* Blue-grey */
+        }
+
+        .bar-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .bar-inputs {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .bar-inputs label {
+            font-weight: normal;
+            color: #666;
+            margin-right: 5px;
+        }
+
+        .bar-inputs input[type="number"] {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>calangos rpg</h1>
+
+        <h2>Atributos <br>(6 para distribuir máximo de 3)</h2>
+      
+        <div class="attributes-section">
+            <div class="attribute">
+                <h3>Força</h3>
+                <input type="number" id="forca" value="0" min="0">
+            </div>
+            <div class="attribute">
+                <h3>Agilidade</h3>
+                <input type="number" id="agilidade" value="0" min="0">
+            </div>
+            <div class="attribute">
+                <h3>Intelecto</h3>
+                <input type="number" id="intelecto" value="0" min="0">
+            </div>
+            <div class="attribute">
+                <h3>Presença</h3>
+                <input type="number" id="presenca" value="0" min="0">
+            </div>
+            <div class="attribute">
+                <h3>Vigor</h3>
+                <input type="number" id="vigor" value="0" min="0">
+            </div>
+        </div>
+
+        <h2>Pontos de Vida <br>(10 + Vigor)</h2>
+        <div class="bar-section health-bar">
+            <div class="bar-labels">
+                <span>Atual: <span id="currentHealthDisplay">10</span></span>
+                <span>Máximo: <span id="maxHealthDisplay">10</span></span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" id="healthFill" style="width: 100%;"></div>
+            </div>
+            <div class="bar-inputs">
+                <label for="currentHealth">Atual:</label>
+                <input type="number" id="currentHealth" value="10" min="0">
+                <label for="maxHealth">Máximo:</label>
+                <input type="number" id="maxHealth" value="10" min="0">
+            </div>
+        </div>
+
+        <h2>Pontos de Estresse <br>(Rola 1d6 e adiciona)</h2>
+        <div class="bar-section stress-bar">
+            <div class="bar-labels">
+                <span>Atual: <span id="currentStressDisplay">0</span></span>
+                <span>Máximo: <span id="maxStressDisplay">20</span></span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" id="stressFill" style="width: 0%;"></div>
+            </div>
+            <div class="bar-inputs">
+                <label for="currentStress">Atual:</label>
+                <input type="number" id="currentStress" value="0" min="0" max="20">
+                <label>Máximo:</label>
+                <input type="number" id="maxStress" value="20" min="0" readonly>
+            </div>
+        </div>
+    </div>
+   
+   <p>Regras gerais<br>
+<br>
+Testes d6 + atributo (quantidade de dados):<br>
+1 desastre<br>
+2 falha ruim<br>
+3 falha normal<br>
+4 sucesso normal<br>
+5 sucesso bom<br>
+6 crítico<br>
+<br>
+Dano:<br>
+1 desastre: sem dano e perde próximo ataque<br>
+2 falha ruim: sem dano<br>
+3 falha normal: dano seco<br>
+4 sucesso normal: dano + 1<br>
+5 sucesso bom: dano + 2<br>
+6 crítico: dobro de dano (2d6+1 se for 1d6+1)<br>
+<br>
+Armas:<br>
+• pistola: 2d6<br>
+• faca: 1d6<br>
+• espada: 1d6 + 3<br>
+<br>
+Estresse: mais 1d6 de estresse<br>
+a) ação extra<br>
+b) rolar jogada de novo<br>
+<p>Tabela Estresse</p>
+1.<br>
+2.<br>
+3.<br>
+4.<br>
+5.<br>
+6. Grito de frustração (quebra furtividade)<br>
+7.<br>
+8.Quebra item usado surtando<br>
+9.<br>
+10. Tremendo (-2 na próxima ação)<br>
+11. <br>
+12. Perde próximo turno fugindo<br>
+13. +1 de paranormal<br>
+14. Perde próximo turno paralisado<br>
+15. Tremendo -5 na próxima ação<br>
+16. +1 de paranormal<br>
+17. Se fere de frustração (socando algo, etc) 1d6 de dano<br>
+18. +1 de paranormal<br>
+19. Ataque cardíaco (3d6 de dano)<br>
+20. 1 insanidade permanente<br>
+<br>
+<br>
+</p>
+    
+ <!--   <div>
+     pedido para a ia:
+     Quero criar um site html para usar como ficha de rpg de mesa que eu e meus amigos vamos preencher para jogar
+
+no topo, quero a área de atributos com 5 divs estilizadas para mostrar os 5 atributos:
+Força
+Agilidade
+Intelecto
+Presença
+Vigor
+
+abaixo disso, deve aparecer uma barra com pontos de vida com um valor máximo e um valor atual editável
+
+abaixo disso, deve aparecer uma barra com pontos de estresse com um valor máximo de 20 e um valor atual editável começando em 0
+    </div> -->
+
+    <script>
+        // Funções para atualizar as barras de vida e estresse
+        function updateHealthBar() {
+            const currentHealthInput = document.getElementById('currentHealth');
+            const maxHealthInput = document.getElementById('maxHealth');
+            const healthFill = document.getElementById('healthFill');
+            const currentHealthDisplay = document.getElementById('currentHealthDisplay');
+            const maxHealthDisplay = document.getElementById('maxHealthDisplay');
+
+            let currentHealth = parseInt(currentHealthInput.value);
+            let maxHealth = parseInt(maxHealthInput.value);
+
+            // Ensure current health doesn't exceed max health
+            if (currentHealth > maxHealth) {
+                currentHealth = maxHealth;
+                currentHealthInput.value = maxHealth;
+            }
+            if (currentHealth < 0) {
+                currentHealth = 0;
+                currentHealthInput.value = 0;
+            }
+
+            currentHealthDisplay.textContent = currentHealth;
+            maxHealthDisplay.textContent = maxHealth;
+
+            const percentage = (currentHealth / maxHealth) * 100;
+            healthFill.style.width = percentage + '%';
+            healthFill.textContent = `${currentHealth}/${maxHealth}`;
+        }
+
+        function updateStressBar() {
+            const currentStressInput = document.getElementById('currentStress');
+            const maxStressInput = document.getElementById('maxStress');
+            const stressFill = document.getElementById('stressFill');
+            const currentStressDisplay = document.getElementById('currentStressDisplay');
+            const maxStressDisplay = document.getElementById('maxStressDisplay');
+
+            let currentStress = parseInt(currentStressInput.value);
+            const maxStress = parseInt(maxStressInput.value);
+
+            // Ensure current stress doesn't exceed max stress or go below 0
+            if (currentStress > maxStress) {
+                currentStress = maxStress;
+                currentStressInput.value = maxStress;
+            }
+            if (currentStress < 0) {
+                currentStress = 0;
+                currentStressInput.value = 0;
+            }
+
+            currentStressDisplay.textContent = currentStress;
+            maxStressDisplay.textContent = maxStress;
+
+            const percentage = (currentStress / maxStress) * 100;
+            stressFill.style.width = percentage + '%';
+            stressFill.textContent = `${currentStress}/${maxStress}`;
+        }
+
+        // Adiciona event listeners para atualizar as barras quando os valores mudarem
+        document.getElementById('currentHealth').addEventListener('input', updateHealthBar);
+        document.getElementById('maxHealth').addEventListener('input', updateHealthBar);
+        document.getElementById('currentStress').addEventListener('input', updateStressBar);
+
+        // Chamada inicial para configurar as barras
+        document.addEventListener('DOMContentLoaded', () => {
+            updateHealthBar();
+            updateStressBar();
+        });
+    </script>
+</body>
+</html>
+
