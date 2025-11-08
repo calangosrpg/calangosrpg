@@ -223,7 +223,18 @@
             </div>
         </div>
     </div>
-   
+
+       <fieldset style="border: 2px solid #555; border-radius: 8px; padding: 10px 15px;">
+  <legend style="font-size: 1em;">Inventário / Extras</legend>
+           <textarea id="characterInventory" 
+  placeholder="Inventário"
+  style="padding: 10px; width: 80%; max-width: 400px; 
+         border-radius: 8px; border: 1px solid #555; 
+         background-color: #1c1c1c; color: #e0e0e0; 
+         font-size: 1em; resize: vertical; height: 100px;">
+</textarea>
+  </fieldset>
+    
     <div>
       <h2>Regras gerais</h2>
 <p>
@@ -287,7 +298,8 @@ b) rolar jogada de novo<br>
             'characterName', 
             'forca', 
             'agilidade', 
-            'intelecto', 
+            'intelecto',
+            'characterInventory',
             'presenca', 
             'vigor',
             'currentHealth',
