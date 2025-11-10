@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04</title>
+    <link rel="shortcut icon" href="logo/logo.png" type="image/png">
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        background-color: #1e1e1e;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #81c784;
+        margin-bottom: 30px;
+    }
+
+    .attributes-section {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+        gap: 20px;
+    }
+
+    .attribute {
+        background-color: #263238;
+        border: 1px solid #37474f;
+        border-radius: 8px;
+        padding: 15px 20px;
+        text-align: center;
+        min-width: 120px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .attribute:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .attribute h3 {
+        margin-top: 0;
+        color: #4fc3f7;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .attribute input[type="number"] {
+        width: 80px;
+        padding: 8px;
+        border: 1px solid #555;
+        background-color: #1c1c1c;
+        color: #e0e0e0;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 1.1em;
+    }
+
+    .bar-section {
+        margin-bottom: 30px;
+    }
+
+    .bar-container {
+        background-color: #2c2c2c;
+        border-radius: 20px;
+        height: 30px;
+        margin-top: 10px;
+        overflow: hidden;
+        border: 1px solid #444;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .bar-fill {
+        height: 100%;
+        border-radius: 20px;
+        transition: width 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    .health-bar .bar-fill {
+        background-color: #ef5350;
+    }
+
+    .stress-bar .bar-fill {
+        background-color: #607d8b;
+    }
+
+    .bar-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #bbb;
+    }
+
+    .bar-inputs {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+        align-items: center;
+    }
+
+    .bar-inputs label {
+        font-weight: normal;
+        color: #ccc;
+        margin-right: 5px;
+    }
+
+    .bar-inputs input[type="number"] {
+        width: 60px;
+        padding: 6px;
+        border: 1px solid #555;
+        background-color: #1c1c1c;
+        color: #e0e0e0;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    button {
+        background-color: #333;
+        color: #fff;
+        border: 1px solid #666;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin: 0 5px;
+    }
+
+    button:hover {
+        background-color: #444;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        
+        <img src="logo/logo.png" 
+     alt="Logo RPG Calango" 
+     style="display: block; margin: 0 auto; width: 50%; height: auto;">
+
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <label for="characterName" style="display: block; margin-bottom: 8px; font-size: 1.2em;"><h2>Nome do Personagem</h2></label>
+            <input type="text" id="characterName" placeholder="Digite o nome..." style="padding: 10px; width: 80%; max-width: 400px; border-radius: 8px; border: 1px solid #555; background-color: #1c1c1c; color: #e0e0e0; font-size: 1em;">
+        </div>
+
+        <h2>Atributos <br>(6 para distribuir, máximo de 3)</h2>
+
+        <div class="attributes-section">
+            <div class="attribute"><h3>Força</h3><input type="number" id="forca" value="0" min="0"></div>
+            <div class="attribute"><h3>Agilidade</h3><input type="number" id="agilidade" value="0" min="0"></div>
+            <div class="attribute"><h3>Intelecto</h3><input type="number" id="intelecto" value="0" min="0"></div>
+            <div class="attribute"><h3>Presença</h3><input type="number" id="presenca" value="0" min="0"></div>
+            <div class="attribute"><h3>Vigor</h3><input type="number" id="vigor" value="0" min="0"></div>
+        </div>
+
+        <h2>Pontos de Vida <br>(10 + Vigor)</h2>
+        <div style="text-align: center; margin-bottom: 10px;">
+            <button onclick="changeHealth(-1)">-</button>
+            <button onclick="changeHealth(1)">+</button>
+        </div>
+
+        <div class="bar-section health-bar">
+            <div class="bar-labels">
+                <span>Atual: <span id="currentHealthDisplay">10</span></span>
+                <span>Máximo: <span id="maxHealthDisplay">10</span></span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" id="healthFill" style="width: 100%;"></div>
+            </div>
+            <div class="bar-inputs">
+                <label for="currentHealth">Atual:</label>
+                <input type="number" id="currentHealth" value="10" min="0">
+                <label for="maxHealth">Máximo:</label>
+                <input type="number" id="maxHealth" value="10" min="0">
+            </div>
+        </div>
+
+        <h2>Pontos de Estresse <br>(Rola 1d6 e adiciona)</h2>
+        <div style="text-align: center; margin-bottom: 10px;">
+            <button onclick="changeStress(-1)">-</button>
+            <button onclick="changeStress(1)">+</button>
+        </div>
+
+        <div class="bar-section stress-bar">
+            <div class="bar-labels">
+                <span>Atual: <span id="currentStressDisplay">0</span></span>
+                <span>Máximo: <span id="maxStressDisplay">20</span></span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" id="stressFill" style="width: 0%;"></div>
+            </div>
+            <div class="bar-inputs">
+                <label for="currentStress">Atual:</label>
+                <input type="number" id="currentStress" value="0" min="0" max="20">
+                <label>Máximo:</label>
+                <input type="number" id="maxStress" value="20" min="0" readonly>
+            </div>
+        </div>
+               
+ <h2>Inventário / Extras</h2>
+           <textarea id="characterInventory" 
+  placeholder="Inventário"
+  style="padding: 10px; width: 94%; 
+         border-radius: 8px; border: 1px solid #555; 
+         background-color: #1c1c1c; color: #e0e0e0; 
+         font-size: 1.5em; resize: vertical; height: 200px;">
+</textarea>
+    </div>
+    
+    <div>
+      <h2>Regras gerais</h2>
+<p>
+<br>
+Testes d6 + atributo (quantidade de dados):<br>
+1 desastre<br>
+2 falha ruim<br>
+3 falha normal<br>
+4 sucesso normal<br>
+5 sucesso bom<br>
+6 crítico<br>
+<br>
+Dano:<br>
+1 desastre: sem dano e perde próximo ataque<br>
+2 falha ruim: sem dano<br>
+3 falha normal: metade do dano<br>(arredondado para baixo)<br>
+4 sucesso normal: dano padrão<br>
+5 sucesso bom: dano + 2<br>
+6 crítico: dobro de dano (2d6+1 se for 1d6+1)<br>
+<br>
+Reação: (1x por rodada)
+<br>
+• Esquiva: AGILIDADE (anula dano)<br>
+dificuldade = ataque inimigo
+<br><br>
+• Bloqueio: FORÇA (metade do dano)<br>
+dificuldade = rolagem d6
+<br><br>
+• Contra-ataque: (recebe dano e ataca)<br>
+dificuldade = nula
+<br>
+<br>
+Armas:<br>
+LEVE CORPO A CORPO<br>
+• Faca / Adaga: 1d6<br>
+• Soco Inglês: 1d6 - 1 (Dano mínimo 1)<br>
+• Maça / Clava Leve: 1d6 + 1 <br>
+• Espada Curta: 1d6 + 2<br>
+• Espada Longa / Rapieira: 1d6 + 3<br>
+• Machado de Uma Mão: 1d6 + 4<br>
+<br>
+PESADA CORPO A CORPO<br>
+• Espada de Duas Mãos: 2d6<br>
+• Machado de Batalha: 2d6 + 1<br>
+• Martelo de Guerra (Duas Mãos): 2d6 + 2<br>
+<br>
+LONGO ALCANCE<br>
+• Besta Leve: 2d6 - 1<br>
+• Arco Curto: 2d6<br>
+• Besta Pesada / Arco Longo: 2d6 + 1<br>
+• Pistola (Calibre Comum): 2d6<br>
+• Escopeta: (Curta Distância) 3d6 (Ou 2d6 em Alvo Múltiplo)<br>
+• Rifle de Assalto / Submetralhadora: 3d6 - 1<br>
+• Rifle de Precisão: 3d6 + 1<br>
+
+<br>
+Estresse: mais 1d6 de estresse<br>
+a) ação extra<br>
+b) rolar jogada de novo<br>
+<br>
++1 de paranormal é um ponto dado ao mestre para que ele gaste com eventos sobrenaturais extraordinários na cena (precisa avisar ao gastar)<br>
+
+<h3>Tabela Estresse</h3>
+1. Giro de cabeça rápido (dificuldade de se concentrar): -1 em todas as ações até o fim da cena. <br>
+<br> 2. Perda de foco momentânea: O personagem fica paralisado por 1 rodada, incapaz de agir. <br>
+<br> 3. Tontura: O personagem sofre -1 em todas as jogadas até o próximo descanso. <br>
+<br> 4. Sensação de calor/frio insuportável: -1 de resistência contra efeitos físicos por 1d6 turnos. <br>
+<br> 5. Enxaqueca: -2 em qualquer teste de habilidade mental até o final da cena. <br>
+<br> 6. Grito de frustração (quebra furtividade)<br>
+<br> 7. Descontrole emocional: O personagem deve realizar um teste de moralidade (ou vontade) ou agir de maneira impulsiva ou irracional. <br>
+<br> 8. Quebra item usado surtando<br>
+<br> 9. Reação explosiva: O personagem ataca ou grita sem querer, revelando sua posição ou tomando ações precipitadas. <br>
+<br> 10. Tremendo (-2 na próxima ação)<br>
+<br> 11. Desmaio súbito: O personagem desmaia por 1d4 turnos, perdendo sua vez de agir até acordar. <br>
+<br> 12. Perde próximo turno fugindo<br>
+<br> 13. +1 de paranormal<br>
+<br> 14. Perde próximo turno paralisado<br>
+<br> 15. Tremendo -5 na próxima ação<br>
+<br> 16. +1 de paranormal<br>
+<br> 17. Se fere de frustração (socando algo, etc) 1d6 de dano<br>
+<br> 18. +1 de paranormal<br>
+<br> 19. Ataque cardíaco (3d6 de dano)<br>
+<br> 20. 1 insanidade permanente<br>
+<br>
+<br>
+</p>
+    </div>
+
+    <script>
+        // 🎯 IDs de todos os campos que você quer salvar (persistir)
+        const camposParaSalvar = [
+            'characterName', 
+            'forca', 
+            'agilidade', 
+            'intelecto',
+            'characterInventory',
+            'presenca', 
+            'vigor',
+            'currentHealth',
+            'maxHealth',
+            'currentStress',
+            'maxStress' // Embora 'maxStress' seja readonly, mantê-lo aqui não fará mal
+        ];
+
+        // Função principal para inicializar o salvamento e carregamento
+        function setupLocalStorage() {
+            camposParaSalvar.forEach(id => {
+                const elemento = document.getElementById(id);
+                if (elemento) {
+                    // 1. CARREGAR o valor salvo no localStorage
+                    const valorSalvo = localStorage.getItem(id);
+                    if (valorSalvo !== null) {
+                        elemento.value = valorSalvo;
+                    }
+
+                    // 2. SALVAR o valor no localStorage a cada alteração
+                    elemento.addEventListener('input', function() {
+                        localStorage.setItem(id, this.value);
+                    });
+                }
+            });
+        }
+
+        // --- Funções de atualização e controle (mantidas do seu código) ---
+
+        function updateHealthBar() {
+            const currentHealthInput = document.getElementById('currentHealth');
+            const maxHealthInput = document.getElementById('maxHealth');
+            const healthFill = document.getElementById('healthFill');
+            const currentHealthDisplay = document.getElementById('currentHealthDisplay');
+            const maxHealthDisplay = document.getElementById('maxHealthDisplay');
+
+            let currentHealth = parseInt(currentHealthInput.value);
+            let maxHealth = parseInt(maxHealthInput.value);
+
+            if (currentHealth > maxHealth) {
+                currentHealth = maxHealth;
+                currentHealthInput.value = maxHealth;
+            }
+            if (currentHealth < 0) {
+                currentHealth = 0;
+                currentHealthInput.value = 0;
+            }
+
+            currentHealthDisplay.textContent = currentHealth;
+            maxHealthDisplay.textContent = maxHealth;
+
+            const percentage = (currentHealth / maxHealth) * 100;
+            healthFill.style.width = percentage + '%';
+            healthFill.textContent = `${currentHealth}/${maxHealth}`;
+            
+            // Salva os valores no localStorage sempre que a barra é atualizada (importante para os botões +/-)
+            localStorage.setItem('currentHealth', currentHealth);
+            localStorage.setItem('maxHealth', maxHealth);
+        }
+
+        function updateStressBar() {
+            const currentStressInput = document.getElementById('currentStress');
+            const maxStressInput = document.getElementById('maxStress');
+            const stressFill = document.getElementById('stressFill');
+            const currentStressDisplay = document.getElementById('currentStressDisplay');
+            const maxStressDisplay = document.getElementById('maxStressDisplay');
+
+            let currentStress = parseInt(currentStressInput.value);
+            const maxStress = parseInt(maxStressInput.value);
+
+            if (currentStress > maxStress) {
+                currentStress = maxStress;
+                currentStressInput.value = maxStress;
+            }
+            if (currentStress < 0) {
+                currentStress = 0;
+                currentStressInput.value = 0;
+            }
+
+            currentStressDisplay.textContent = currentStress;
+            maxStressDisplay.textContent = maxStress;
+
+            const percentage = (currentStress / maxStress) * 100;
+            stressFill.style.width = percentage + '%';
+            stressFill.textContent = `${currentStress}/${maxStress}`;
+            
+            // Salva os valores no localStorage sempre que a barra é atualizada (importante para os botões +/-)
+            localStorage.setItem('currentStress', currentStress);
+        }
+
+        function changeHealth(delta) {
+            const input = document.getElementById('currentHealth');
+            const max = parseInt(document.getElementById('maxHealth').value);
+            let value = parseInt(input.value) + delta;
+            value = Math.max(0, Math.min(value, max));
+            input.value = value;
+            updateHealthBar();
+        }
+
+        function changeStress(delta) {
+            const input = document.getElementById('currentStress');
+            const max = parseInt(document.getElementById('maxStress').value);
+            let value = parseInt(input.value) + delta;
+            value = Math.max(0, Math.min(value, max));
+            input.value = value;
+            updateStressBar();
+        }
+
+        // --- Eventos de Atualização e Inicialização ---
+        
+        // Atribui as funções de barra ao evento 'input' dos campos
+        document.getElementById('currentHealth').addEventListener('input', updateHealthBar);
+        document.getElementById('maxHealth').addEventListener('input', updateHealthBar);
+        document.getElementById('currentStress').addEventListener('input', updateStressBar);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Configura o localStorage para todos os campos
+            setupLocalStorage();
+            
+            // 2. Atualiza as barras com os valores recuperados (ou iniciais)
+            updateHealthBar();
+            updateStressBar();
+        });
+        
+    </script>
+</body>
+</html>
